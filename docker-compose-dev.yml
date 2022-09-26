@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  sloth:
+    image: sloth:latest
+    volumes:
+      - ./config.ini:/config.ini
+    restart: always
+    ports:
+      - "9288:9288"
+  sloth-redis:
+    image: redis
+    restart: always
+    ports:
+      - "6381:6379"
+    volumes:
+      - ./resource_config/redis/data:/data
+# docker-compose -f docker-compose-dev.yml up -d
