@@ -3,7 +3,7 @@ package third
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 )
@@ -56,7 +56,7 @@ func SendMsg(key string, msg string, atList []string, mentionedMobileList []stri
 	}
 	defer resp.Body.Close()
 
-	result, _ := ioutil.ReadAll(resp.Body)
+	result, _ := io.ReadAll(resp.Body)
 	return string(result)
 }
 
@@ -81,6 +81,6 @@ func SendMarkdownMsg(key string, msg string) string {
 	}
 	defer resp.Body.Close()
 
-	result, _ := ioutil.ReadAll(resp.Body)
+	result, _ := io.ReadAll(resp.Body)
 	return string(result)
 }

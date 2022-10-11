@@ -7,6 +7,8 @@ import (
 
 // go test -v ding_talk_alert_test.go ding_talk_alert.go
 
+const AlertToken = ""
+
 func TestSendTextMsg(t *testing.T) {
 	var atUsers, atMobiles []string
 	res := SendTextMsg(AlertToken, "测试2021", true, atUsers, atMobiles)

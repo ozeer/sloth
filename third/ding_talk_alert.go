@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"sloth/config"
 	"time"
@@ -86,7 +86,7 @@ func SendTextMsg(accessToken string, msg string, isAtAll bool, atUserIds []strin
 	}
 	defer resp.Body.Close()
 
-	result, _ := ioutil.ReadAll(resp.Body)
+	result, _ := io.ReadAll(resp.Body)
 	return string(result)
 }
 
@@ -120,6 +120,6 @@ func SendMarkdownMessage(accessToken string, title string, text string, isAtAll 
 	}
 	defer resp.Body.Close()
 
-	result, _ := ioutil.ReadAll(resp.Body)
+	result, _ := io.ReadAll(resp.Body)
 	return string(result)
 }
