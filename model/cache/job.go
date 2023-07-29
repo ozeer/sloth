@@ -2,8 +2,8 @@ package cache
 
 import (
 	"github.com/go-redis/redis/v8"
+	"github.com/ozeer/sloth/model/storage"
 	"github.com/vmihailenco/msgpack"
-	"sloth/model/storage"
 )
 
 // Job 使用msgpack序列化后保存到Redis,减少内存占用

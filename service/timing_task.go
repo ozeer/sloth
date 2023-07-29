@@ -3,12 +3,13 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"sloth/config"
-	"sloth/model/cache"
-	"sloth/third"
-	"sloth/tool"
 	"strings"
 	"time"
+
+	"github.com/ozeer/sloth/config"
+	"github.com/ozeer/sloth/model/cache"
+	"github.com/ozeer/sloth/third"
+	"github.com/ozeer/sloth/tool"
 )
 
 var (

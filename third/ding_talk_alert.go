@@ -6,8 +6,9 @@ import (
 	"errors"
 	"io"
 	"net/http"
-	"sloth/config"
 	"time"
+
+	"github.com/ozeer/sloth/config"
 )
 
 // 钉钉机器人发送开关

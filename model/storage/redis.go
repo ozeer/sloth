@@ -2,8 +2,9 @@ package storage
 
 import (
 	"context"
+
 	"github.com/go-redis/redis/v8"
-	"sloth/config"
+	"github.com/ozeer/sloth/config"
 )
 
 var (

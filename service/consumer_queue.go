@@ -2,12 +2,13 @@ package service
 
 import (
 	"encoding/json"
-	"github.com/go-redis/redis/v8"
 	"os"
-	"sloth/config"
-	"sloth/tool"
 	"strconv"
 	"time"
+
+	"github.com/go-redis/redis/v8"
+	"github.com/ozeer/sloth/config"
+	"github.com/ozeer/sloth/tool"
 )
 
 var (

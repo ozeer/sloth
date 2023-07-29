@@ -2,10 +2,11 @@ package tool
 
 import (
 	"errors"
-	"github.com/mattn/go-isatty"
-	"github.com/sirupsen/logrus"
 	"os"
-	"sloth/config"
+
+	"github.com/mattn/go-isatty"
+	"github.com/ozeer/sloth/config"
+	"github.com/sirupsen/logrus"
 )
 
 var isTerm bool

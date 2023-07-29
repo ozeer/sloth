@@ -3,10 +3,10 @@ package routers
 import (
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
+	"github.com/ozeer/sloth/config"
+	"github.com/ozeer/sloth/controllers"
+	"github.com/ozeer/sloth/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"sloth/config"
-	"sloth/controllers"
-	"sloth/prometheus"
 )
 
 func Init(c config.Conf) *gin.Engine {

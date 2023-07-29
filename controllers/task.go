@@ -2,14 +2,15 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"sloth/model/cache"
-	"sloth/service"
-	"sloth/third"
-	"sloth/tool"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/ozeer/sloth/model/cache"
+	"github.com/ozeer/sloth/service"
+	"github.com/ozeer/sloth/third"
+	"github.com/ozeer/sloth/tool"
 )
 
 // AddTask 添加定时任务

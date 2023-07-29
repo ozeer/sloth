@@ -2,8 +2,8 @@ package cache
 
 import (
 	"github.com/go-redis/redis/v8"
-	"sloth/model/storage"
-	"sloth/tool"
+	"github.com/ozeer/sloth/model/storage"
+	"github.com/ozeer/sloth/tool"
 )
 
 // BucketItem bucket中的元素
