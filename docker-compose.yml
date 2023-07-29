@@ -1,8 +1,28 @@
 version: '3'
 
 services:
-  sloth:
-    image: sloth:latest
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "9288:9288"
     volumes:
       - ./config.ini:/config.ini
-    restart: always
+    restart: no
+    depends_on:
+      - redis
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: no
+    command: redis-server /etc/redis/redis.conf --appendonly yes --requirepass "123456"
+    ports:
+      - "6381:6379"
+    volumes:
+      - ./resource_config/redis/redis.conf:/etc/redis/redis.conf
+      - ./resource_config/redis/data:/data
+    privileged: true

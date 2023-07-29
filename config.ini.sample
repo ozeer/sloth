@@ -20,7 +20,7 @@ log_level="debug"
 [redis]
 host="127.0.0.1"
 port="6379"
-password=""
+password="123456"
 db=0
 connect_timeout=5000
 read_timeout=180000
@@ -33,4 +33,4 @@ switch_on=true
 host="127.0.0.1"
 port="6379"
 password=""
-queue_name="hzQDoraemon"
+queue_name="sloth_consumer"

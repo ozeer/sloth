@@ -2,8 +2,6 @@ package main
 
 import (
 	"flag"
-	"github.com/facebookgo/grace/gracehttp"
-	"golang.org/x/sync/errgroup"
 	"log"
 	"net/http"
 	"sloth/config"
@@ -12,6 +10,9 @@ import (
 	"sloth/service"
 	"sloth/third"
 	"sloth/tool"
+
+	"github.com/facebookgo/grace/gracehttp"
+	"golang.org/x/sync/errgroup"
 )
 
 var (
