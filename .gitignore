@@ -17,4 +17,4 @@ vendor/
 tmp/
 
 # sloth
-resource_config/redis/
+resource_config/redis/data/
