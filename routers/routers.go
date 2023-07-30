@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ozeer/sloth/config"
 	"github.com/ozeer/sloth/controllers"
-	"github.com/ozeer/sloth/prometheus"
+	"github.com/ozeer/sloth/middleware"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -24,8 +24,10 @@ func Init(c config.Conf) *gin.Engine {
 	}
 
 	// 注册prometheus中间件
-	gp := prometheus.New(router)
+	gp := middleware.NewPrometheus(router)
 	router.Use(gp.Middleware())
+	router.Use(middleware.Cors())
+
 	// metrics采样
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 

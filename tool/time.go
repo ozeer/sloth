@@ -12,6 +12,6 @@ func TimestampToDate(timestamp int64) string {
 	return time.Unix(timestamp, 0).Format(timeLayout)
 }
 
-func CurrDate() string {
+func CurrentDate() string {
 	return time.Now().Format(timeLayout)
 }

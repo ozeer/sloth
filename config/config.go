@@ -2,10 +2,11 @@ package config
 
 import (
 	"bytes"
-	"github.com/spf13/viper"
 	"io/ioutil"
 	"log"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 type Conf struct {
@@ -93,7 +94,7 @@ var defaultConf = []byte(`
 	host="127.0.0.1"
 	port="6379"
 	password=""
-	queue_name="hzQDoraemon"
+	queue_name="sloth_consumer"
 `)
 
 func LoadConfig(confPath string) (Conf, error) {

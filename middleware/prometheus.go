@@ -1,4 +1,4 @@
-package prometheus
+package middleware
 
 import (
 	"strconv"
@@ -70,7 +70,7 @@ func Ignore(path ...string) Option {
 }
 
 // New gin prometheus
-func New(e *gin.Engine, options ...Option) *GinPrometheus {
+func NewPrometheus(e *gin.Engine, options ...Option) *GinPrometheus {
 	if e == nil {
 		return nil
 	}

@@ -47,7 +47,5 @@ func insertQueue(controller, queueName string, params map[string]string) {
 	result := rdb.RPush(rdb.Context(), QueueName, value)
 
 	// 记录传入参数、写入数据及返回结果日志
-	tool.LogAccess.Infof("Insert Queue:%v#Result:%v", params, result)
-
-	return
+	tool.LogAccess.Infof("Consumer Queue:%v#Result:%v", params, result)
 }

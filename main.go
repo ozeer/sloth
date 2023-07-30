@@ -9,7 +9,6 @@ import (
 	"github.com/ozeer/sloth/model/storage"
 	"github.com/ozeer/sloth/routers"
 	"github.com/ozeer/sloth/service"
-	"github.com/ozeer/sloth/third"
 	"github.com/ozeer/sloth/tool"
 
 	"github.com/facebookgo/grace/gracehttp"
@@ -22,7 +21,9 @@ var (
 
 func main() {
 	// 解析命令行参数
-	ParseCommandArgs(configFile)
+	flag.StringVar(&configFile, "c", "", "./app-name -c /path/to/config.ini")
+	flag.StringVar(&configFile, "config", "", "./app-name -c /path/to/config.ini")
+	flag.Parse()
 
 	// 加载配置文件
 	conf, err := config.LoadConfig(configFile)
@@ -47,9 +48,9 @@ func main() {
 	}
 
 	// 初始化钉钉机器人配置
-	if err := third.InitDingTalk(conf); err != nil {
-		log.Fatalf("Can't init ding talk, error: %v", err)
-	}
+	// if err := third.InitDingTalk(conf); err != nil {
+	// 	log.Fatalf("Can't init ding talk, error: %v", err)
+	// }
 
 	// 初始化队列
 	service.Init(conf)
@@ -67,11 +68,4 @@ func main() {
 	if err = g.Wait(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-// ParseCommandArgs 解析命令行参数
-func ParseCommandArgs(configFile string) {
-	flag.StringVar(&configFile, "c", "", "./app-name -c /path/to/config.ini")
-	flag.StringVar(&configFile, "config", "", "./app-name -c /path/to/config.ini")
-	flag.Parse()
 }

@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/ozeer/sloth/config"
@@ -136,22 +135,25 @@ func ScanBucket(t time.Time, bucketName string) {
 			//		"任务主题：" + job.Topic,
 			//		"任务id：" + job.Id,
 			//		"任务参数：" + job.Body,
-			//		"消费时间：" + tool.CurrDate(),
+			//		"消费时间：" + tool.CurrentDate(),
 			//	}
 			//	msg := strings.Join(msgMap, "\n")
 			//	SendMsg(AlertMsgKey, msg, atList, mentionedMobileList)
 			//}
 
 			// 发送消费钉钉机器人通知
-			var atUserIds, atMobiles []string
-			msgMap := []string{
-				"任务主题：" + job.Topic,
-				"任务id：" + job.Id,
-				"任务参数：" + job.Body,
-				"消费时间：" + tool.CurrDate(),
-			}
-			msg := strings.Join(msgMap, "\n")
-			third.SendTextMsg(third.AccessToken, msg, true, atUserIds, atMobiles)
+			// var atUserIds, atMobiles []string
+			// msgMap := []string{
+			// 	"任务主题：" + job.Topic,
+			// 	"任务id：" + job.Id,
+			// 	"任务参数：" + job.Body,
+			// 	"消费时间：" + tool.CurrentDate(),
+			// }
+			// msg := strings.Join(msgMap, "\n")
+			// third.SendTextMsg(third.AccessToken, msg, true, atUserIds, atMobiles)
+
+			msg := fmt.Sprintf("任务主题: %s\\n任务id: %s\\n消费时间: %s", job.Topic, job.Id, tool.CurrentDate())
+			third.SendLarkMsg(msg)
 		}
 	}
 }

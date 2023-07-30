@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -54,6 +54,8 @@ func AddTask(c *gin.Context) {
 		tool.Fail(c, err.Error())
 		return
 	} else {
+		tool.LogAccess.Infof("Insert Queue:%v", body)
+
 		// 创建任务消息通知
 		//if service.WeChatSwitchOn {
 		//	var atList,mentionedMobileList []string
@@ -62,24 +64,29 @@ func AddTask(c *gin.Context) {
 		//		"任务id：" + job.Id,
 		//		"延迟时间(秒)：" + tool.Int64ToString(delay),
 		//		"任务参数：" + job.Body,
-		//		"创建时间：" + tool.CurrDate(),
+		//		"创建时间：" + tool.CurrentDate(),
 		//		"执行时间：" + tool.TimestampToDate(job.Delay),
 		//	}
 		//	msg := strings.Join(msgMap, "\n")
 		//	service.SendMsg(service.AlertMsgKey, msg, atList, mentionedMobileList)
 		//}
 
-		var atUserIds, atMobiles []string
-		msgMap := []string{
-			"任务主题：" + job.Topic,
-			"任务id：" + job.Id,
-			"任务参数：" + job.Body,
-			"延迟时间(秒)：" + tool.Int64ToString(delay),
-			"创建时间：" + tool.CurrDate(),
-			"执行时间：" + tool.TimestampToDate(job.Delay),
-		}
-		msg := strings.Join(msgMap, "\n")
-		third.SendTextMsg(third.AccessToken, msg, true, atUserIds, atMobiles)
+		// DingTalk消息
+		// var atUserIds, atMobiles []string
+		// msgMap := []string{
+		// 	"任务主题：" + job.Topic,
+		// 	"任务id：" + job.Id,
+		// 	"任务参数：" + job.Body,
+		// 	"延迟时间(秒)：" + tool.Int64ToString(delay),
+		// 	"创建时间：" + tool.CurrentDate(),
+		// 	"执行时间：" + tool.TimestampToDate(job.Delay),
+		// }
+		// msg := strings.Join(msgMap, "\n")
+		// third.SendTextMsg(third.AccessToken, msg, true, atUserIds, atMobiles)
+
+		// 飞书消息
+		msg := fmt.Sprintf("任务主题: %s\\n任务id: %s\\n延迟时间: %s(s)\\n创建时间: %s\\n执行时间: %s", job.Topic, job.Id, tool.Int64ToString(delay), tool.CurrentDate(), tool.TimestampToDate(job.Delay))
+		third.SendLarkMsg(msg)
 
 		tool.Success(c, "添加成功", temp)
 		return
