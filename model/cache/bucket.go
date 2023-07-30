@@ -2,8 +2,8 @@ package cache
 
 import (
 	"github.com/go-redis/redis/v8"
+	"github.com/ozeer/sloth/global"
 	"github.com/ozeer/sloth/model/storage"
-	"github.com/ozeer/sloth/tool"
 )
 
 // BucketItem bucket中的元素
@@ -52,7 +52,7 @@ func GetFromBucket(key string) (*BucketItem, error) {
 func RemoveFromBucket(bucket string, jobId string) int64 {
 	num, err := storage.Rdb.ZRem(storage.Ctx, bucket, jobId).Result()
 	if err != nil {
-		tool.LogError.Errorf("delete job(%s) fail from bucket(%s)：%s", jobId, bucket, err.Error())
+		global.Errorf("delete job(%s) fail from bucket(%s)：%s", jobId, bucket, err.Error())
 	}
 	return num
 }

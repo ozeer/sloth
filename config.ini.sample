@@ -1,4 +1,7 @@
-[Gin]
+[app]
+name=sloth
+debug=false
+[gin]
 mode=release
 address=0.0.0.0
 port=9288
@@ -17,6 +20,12 @@ error_log="stderr"
 error_level="error"
 log_dir="sloth_log"
 log_level="debug"
+[zap]
+dir=/tmp/sloth/
+max_size=1
+max_backups=10
+max_age=90
+compress=false
 [redis]
 host="127.0.0.1"
 port="6379"

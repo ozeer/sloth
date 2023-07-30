@@ -1,18 +1,20 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"log"
 	"net/http"
+	"syscall"
 
 	"github.com/ozeer/sloth/config"
+	"github.com/ozeer/sloth/global"
 	"github.com/ozeer/sloth/model/storage"
 	"github.com/ozeer/sloth/routers"
 	"github.com/ozeer/sloth/service"
-	"github.com/ozeer/sloth/tool"
 
-	"github.com/facebookgo/grace/gracehttp"
-	"golang.org/x/sync/errgroup"
+	graceHttp "github.com/facebookgo/grace/gracehttp"
+	errGroup "golang.org/x/sync/errgroup"
 )
 
 var (
@@ -33,9 +35,19 @@ func main() {
 	}
 
 	// 初始化日志配置
-	if err := tool.InitLog(conf); err != nil {
-		log.Fatalf("Can't load log module, error: %v", err)
-	}
+	// if err := tool.InitLog(conf); err != nil {
+	// 	log.Fatalf("Can't load log module, error: %v", err)
+	// }
+
+	// 初始化日志配置
+	global.Logger = config.InitLogger(conf)
+	defer func() {
+		err := global.Logger.Sync()
+		if err != nil && !errors.Is(err, syscall.ENOTTY) {
+			// 处理错误的逻辑
+			global.Error("日志错误：", err.Error())
+		}
+	}()
 
 	// 初始化Redis配置
 	if err := storage.InitRedis(conf); err != nil {
@@ -53,17 +65,17 @@ func main() {
 	// }
 
 	// 初始化队列
-	service.Init(conf)
+	service.InitTimerTask(conf)
 
 	// 初始化路由，启动http服务
-	var g errgroup.Group
+	var g errGroup.Group
 	g.Go(func() error {
-		return gracehttp.Serve(&http.Server{
+		return graceHttp.Serve(&http.Server{
 			Addr:    conf.Gin.Address + ":" + conf.Gin.Port,
 			Handler: routers.Init(conf),
 		})
 	})
-	tool.LogAccess.Infof("Start http server! %s:%s", conf.Gin.Address, conf.Gin.Port)
+	global.InfoF("Start http server! %s:%s", conf.Gin.Address, conf.Gin.Port)
 
 	if err = g.Wait(); err != nil {
 		log.Fatal(err)

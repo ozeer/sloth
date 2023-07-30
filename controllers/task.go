@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/ozeer/sloth/global"
 	"github.com/ozeer/sloth/model/cache"
 	"github.com/ozeer/sloth/service"
 	"github.com/ozeer/sloth/third"
@@ -50,11 +51,11 @@ func AddTask(c *gin.Context) {
 	err := service.AddTask(job)
 
 	if err != nil {
-		tool.LogError.Error("Add task fail：", err.Error())
+		global.Error("Add task fail：", err.Error())
 		tool.Fail(c, err.Error())
 		return
 	} else {
-		tool.LogAccess.Infof("Insert Queue:%v", body)
+		global.InfoF("Insert Queue:%v", body)
 
 		// 创建任务消息通知
 		//if service.WeChatSwitchOn {
@@ -98,12 +99,12 @@ func GetTask(c *gin.Context) {
 	id := c.Query("id")
 	job, err := cache.GetJob(id)
 	if err != nil {
-		tool.LogError.Errorf("Get task#%s# fail：%s", id, err.Error())
+		global.Errorf("Get task#%s# fail：%s", id, err.Error())
 		tool.Fail(c, err.Error())
 	}
 
 	if job == nil {
-		tool.LogError.Error("Task not exist：", id)
+		global.Error("Task not exist：", id)
 		tool.Fail(c, "Task not exist")
 	}
 

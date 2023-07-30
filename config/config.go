@@ -2,20 +2,35 @@ package config
 
 import (
 	"bytes"
-	"io/ioutil"
 	"log"
+	"os"
 	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Conf struct {
+	App           SectionApp           `ini:"app"`
+	Zap           SectionZap           `ini:"zap"`
 	Gin           SectionGin           `ini:"gin"`
 	Core          SectionCore          `ini:"core"`
 	Log           SectionLog           `ini:"log"`
 	Redis         SectionRedis         `ini:"redis"`
 	DingTalk      SectionDingTalk      `int:"ding_talk"`
 	ConsumerQueue SectionConsumerQueue `ini:"consumer_queue"`
+}
+
+type SectionApp struct {
+	Name  string `ini:"name"`
+	Debug bool   `ini:"debug"`
+}
+
+type SectionZap struct {
+	Dir        string `ini:"dir"`
+	MaxSize    int    `ini:"max_size"`
+	MaxBackups int    `ini:"max_backups"`
+	MaxAge     int    `ini:"max_age"`
+	Compress   bool   `ini:"compress"`
 }
 
 type SectionGin struct {
@@ -63,6 +78,15 @@ type SectionConsumerQueue struct {
 }
 
 var defaultConf = []byte(`
+[app]
+  name=sloth
+  debug=false
+[zap]
+  dir=/tmp/sloth/
+  max_size=1
+  max_backups=10
+  max_age=90
+  compress=false
 [gin]
   mode=debug
   address=0.0.0.0
@@ -104,7 +128,7 @@ func LoadConfig(confPath string) (Conf, error) {
 	viper.AutomaticEnv()
 
 	if confPath != "" {
-		content, err := ioutil.ReadFile(confPath)
+		content, err := os.ReadFile(confPath)
 		if err != nil {
 			return conf, err
 		}
@@ -124,6 +148,17 @@ func LoadConfig(confPath string) (Conf, error) {
 			}
 		}
 	}
+
+	// app
+	conf.App.Name = viper.GetString("app.name")
+	conf.App.Debug = viper.GetBool("app.debug")
+
+	// zap
+	conf.Zap.Dir = viper.GetString("zap.dir")
+	conf.Zap.MaxSize = viper.GetInt("zap.max_size")
+	conf.Zap.MaxBackups = viper.GetInt("zap.max_backups")
+	conf.Zap.MaxAge = viper.GetInt("zap.max_age")
+	conf.Zap.Compress = viper.GetBool("zap.compress")
 
 	// gin
 	conf.Gin.Mode = viper.GetString("gin.mode")

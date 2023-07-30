@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/ozeer/sloth/config"
+	"github.com/ozeer/sloth/global"
 	"github.com/ozeer/sloth/model/cache"
 	"github.com/ozeer/sloth/third"
 	"github.com/ozeer/sloth/tool"
@@ -22,14 +23,14 @@ var (
 func AddTask(job cache.Job) error {
 	err := cache.AddJob(job.Id, job)
 	if err != nil {
-		tool.LogError.Errorf("Add job(%s) to job pool fail：%s", job.Id, err.Error())
+		global.Errorf("Add job(%s) to job pool fail：%s", job.Id, err.Error())
 		return err
 	}
 
 	bucketName := <-bucket
 	err = cache.PushToBucket(bucketName, job.Delay, job.Id)
 	if err != nil {
-		tool.LogError.Errorf("Add job(%s) to bucket(%s) fail：%s", job.Id, bucketName, err.Error())
+		global.Errorf("Add job(%s) to bucket(%s) fail：%s", job.Id, bucketName, err.Error())
 		return err
 	}
 
@@ -37,7 +38,7 @@ func AddTask(job cache.Job) error {
 }
 
 // Init 初始化定时任务
-func Init(cf config.Conf) {
+func InitTimerTask(cf config.Conf) {
 	InitTimers(cf)
 	bucket = GenerateBucketName(cf)
 }
@@ -90,7 +91,7 @@ func ScanBucket(t time.Time, bucketName string) {
 
 		// 集合为空
 		if bucketItem == nil {
-			//tool.LogAccess.Infof("%s：no task!", bucketName)
+			//global.InfoF("%s：no task!", bucketName)
 			return
 		}
 
@@ -122,7 +123,7 @@ func ScanBucket(t time.Time, bucketName string) {
 			var body map[string]string
 			err = json.Unmarshal([]byte(job.Body), &body)
 			if err != nil {
-				tool.LogError.Errorf("json decode fail：%s(jobId:%s)", err.Error(), job.Id)
+				global.Errorf("json decode fail：%s(jobId:%s)", err.Error(), job.Id)
 				return
 			}
 			body["__uk"] = job.Id

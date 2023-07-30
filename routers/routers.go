@@ -26,7 +26,6 @@ func Init(c config.Conf) *gin.Engine {
 	// 注册prometheus中间件
 	gp := middleware.NewPrometheus(router)
 	router.Use(gp.Middleware())
-	router.Use(middleware.Cors())
 
 	// metrics采样
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
