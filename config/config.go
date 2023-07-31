@@ -128,6 +128,8 @@ func LoadConfig(confPath string) (Conf, error) {
 	viper.AutomaticEnv()
 
 	if confPath != "" {
+		log.Println("Using config file:", confPath)
+
 		content, err := os.ReadFile(confPath)
 		if err != nil {
 			return conf, err
