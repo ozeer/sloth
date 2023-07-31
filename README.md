@@ -3,10 +3,16 @@
 
 ---------------------------------------
 #### 使用
+方式1（本地调试）:
 ```
-cp config.ini.sample config.ini
+go run main.go -c config_dev.ini
+或
 go build 
-./sloth -c config.ini
+./sloth -c config_dev.ini
+```
+方式2（直接以docker运行方式调试）:
+```
+docker-compose up -d
 ```
 
 #### 特性
