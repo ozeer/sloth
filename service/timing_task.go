@@ -7,7 +7,7 @@ import (
 
 	"github.com/ozeer/sloth/config"
 	"github.com/ozeer/sloth/global"
-	"github.com/ozeer/sloth/model/cache"
+	"github.com/ozeer/sloth/model"
 	"github.com/ozeer/sloth/third"
 	"github.com/ozeer/sloth/tool"
 )
@@ -20,15 +20,15 @@ var (
 )
 
 // AddTask 添加任务
-func AddTask(job cache.Job) error {
-	err := cache.AddJob(job.Id, job)
+func AddTask(job model.Job) error {
+	err := model.AddJob(job.Id, job)
 	if err != nil {
 		global.Errorf("Add job(%s) to job pool fail：%s", job.Id, err.Error())
 		return err
 	}
 
 	bucketName := <-bucket
-	err = cache.PushToBucket(bucketName, job.Delay, job.Id)
+	err = model.PushToBucket(bucketName, job.Delay, job.Id)
 	if err != nil {
 		global.Errorf("Add job(%s) to bucket(%s) fail：%s", job.Id, bucketName, err.Error())
 		return err
@@ -84,7 +84,7 @@ func Timer(timer *time.Ticker, bucketName string) {
 // ScanBucket 扫描bucket, 取出延迟时间小于当前时间的Job
 func ScanBucket(t time.Time, bucketName string) {
 	for {
-		bucketItem, err := cache.GetFromBucket(bucketName)
+		bucketItem, err := model.GetFromBucket(bucketName)
 		if err != nil {
 			return
 		}
@@ -100,15 +100,15 @@ func ScanBucket(t time.Time, bucketName string) {
 			return
 		}
 
-		job, err := cache.GetJob(bucketItem.JobId)
+		job, err := model.GetJob(bucketItem.JobId)
 		if err != nil {
-			cache.RemoveFromBucket(bucketName, bucketItem.JobId)
+			model.RemoveFromBucket(bucketName, bucketItem.JobId)
 			continue
 		}
 
 		// job元信息不存在, 从bucket中删除
 		if job == nil {
-			cache.RemoveFromBucket(bucketName, bucketItem.JobId)
+			model.RemoveFromBucket(bucketName, bucketItem.JobId)
 			continue
 		}
 
@@ -118,7 +118,7 @@ func ScanBucket(t time.Time, bucketName string) {
 		}
 
 		// 延迟时间小于等于当前时间, 执行定时任务，从bucket中删除任务
-		num := cache.RemoveFromBucket(bucketName, bucketItem.JobId)
+		num := model.RemoveFromBucket(bucketName, bucketItem.JobId)
 		if num > 0 {
 			var body map[string]string
 			err = json.Unmarshal([]byte(job.Body), &body)

@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/ozeer/sloth/global"
 )
 
 const (
@@ -17,11 +19,12 @@ func SendLarkMsg(msg string) string {
 	sendData := `{
 		"msg_type": "text",
 		"content": {"text": "` + "sloth消息通知: \\n" + msg + `"}
-	  }`
+	}`
 
 	resp, err := client.Post(WebHook, "application/json", strings.NewReader(sendData))
 	if err != nil {
-		panic(err)
+		global.Errorf("Send lark message error: %s", err.Error())
+		return err.Error()
 	}
 	defer resp.Body.Close()
 

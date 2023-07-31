@@ -1,10 +1,9 @@
-package storage
+package config
 
 import (
 	"context"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/ozeer/sloth/config"
 )
 
 var (
@@ -12,7 +11,7 @@ var (
 	Ctx = context.Background()
 )
 
-func InitRedis(c config.Conf) error {
+func InitRedis(c Conf) error {
 	Rdb = redis.NewClient(&redis.Options{
 		Addr:         c.Redis.Host + ":" + c.Redis.Port,
 		Password:     c.Redis.Password,

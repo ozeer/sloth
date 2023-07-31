@@ -9,7 +9,6 @@ import (
 
 	"github.com/ozeer/sloth/config"
 	"github.com/ozeer/sloth/global"
-	"github.com/ozeer/sloth/model/storage"
 	"github.com/ozeer/sloth/routers"
 	"github.com/ozeer/sloth/service"
 
@@ -50,7 +49,7 @@ func main() {
 	}()
 
 	// 初始化Redis配置
-	if err := storage.InitRedis(conf); err != nil {
+	if err := config.InitRedis(conf); err != nil {
 		log.Fatalf("Can't init redis, error: %v", err)
 	}
 

@@ -1,9 +1,9 @@
-package cache
+package model
 
 import (
 	"github.com/go-redis/redis/v8"
+	"github.com/ozeer/sloth/config"
 	"github.com/ozeer/sloth/global"
-	"github.com/ozeer/sloth/model/storage"
 )
 
 // BucketItem bucket中的元素
@@ -16,13 +16,13 @@ type BucketItem struct {
 
 // PushToBucket 添加JobId到bucket中
 func PushToBucket(key string, timestamp int64, jobId string) error {
-	_, err := storage.Rdb.Do(storage.Ctx, "ZADD", key, timestamp, jobId).Result()
+	_, err := config.Rdb.Do(config.Ctx, "ZADD", key, timestamp, jobId).Result()
 	return err
 }
 
 // GetFromBucket 从bucket中获取延迟时间最小的JobId
 func GetFromBucket(key string) (*BucketItem, error) {
-	value, err := storage.Rdb.ZRangeByScoreWithScores(storage.Ctx, key, &redis.ZRangeBy{
+	value, err := config.Rdb.ZRangeByScoreWithScores(config.Ctx, key, &redis.ZRangeBy{
 		Min:    "-inf",
 		Max:    "+inf",
 		Offset: 0,
@@ -50,7 +50,7 @@ func GetFromBucket(key string) (*BucketItem, error) {
 
 // RemoveFromBucket 从bucket中删除JobId
 func RemoveFromBucket(bucket string, jobId string) int64 {
-	num, err := storage.Rdb.ZRem(storage.Ctx, bucket, jobId).Result()
+	num, err := config.Rdb.ZRem(config.Ctx, bucket, jobId).Result()
 	if err != nil {
 		global.Errorf("delete job(%s) fail from bucket(%s)：%s", jobId, bucket, err.Error())
 	}

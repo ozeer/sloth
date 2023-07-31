@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/ozeer/sloth/global"
-	"github.com/ozeer/sloth/model/cache"
+	"github.com/ozeer/sloth/model"
 	"github.com/ozeer/sloth/service"
 	"github.com/ozeer/sloth/third"
 	"github.com/ozeer/sloth/tool"
@@ -16,7 +16,7 @@ import (
 
 // AddTask 添加定时任务
 func AddTask(c *gin.Context) {
-	var job cache.Job
+	var job model.Job
 
 	id := c.PostForm("id")
 	topic := c.PostForm("topic")
@@ -97,7 +97,7 @@ func AddTask(c *gin.Context) {
 // GetTask 查询定时任务详情
 func GetTask(c *gin.Context) {
 	id := c.Query("id")
-	job, err := cache.GetJob(id)
+	job, err := model.GetJob(id)
 	if err != nil {
 		global.Errorf("Get task#%s# fail：%s", id, err.Error())
 		tool.Fail(c, err.Error())
@@ -119,7 +119,7 @@ func GetTask(c *gin.Context) {
 // DelTask 删除任务
 func DelTask(c *gin.Context) {
 	id := c.PostForm("id")
-	err := cache.RemoveJob(id)
+	err := model.RemoveJob(id)
 
 	if err != nil {
 		tool.Fail(c, "delete task fail")

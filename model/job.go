@@ -1,8 +1,8 @@
-package cache
+package model
 
 import (
 	"github.com/go-redis/redis/v8"
-	"github.com/ozeer/sloth/model/storage"
+	"github.com/ozeer/sloth/config"
 	"github.com/vmihailenco/msgpack"
 )
 
@@ -21,7 +21,7 @@ type Job struct {
 
 // GetJob 获取Job
 func GetJob(key string) (*Job, error) {
-	value, err := storage.Rdb.Get(storage.Ctx, key).Result()
+	value, err := config.Rdb.Get(config.Ctx, key).Result()
 	if err == redis.Nil {
 		return nil, err
 	} else if err != nil {
@@ -44,12 +44,12 @@ func AddJob(key string, job Job) error {
 	if err != nil {
 		return err
 	}
-	_, err = storage.Rdb.Set(storage.Ctx, key, value, 0).Result()
+	_, err = config.Rdb.Set(config.Ctx, key, value, 0).Result()
 	return err
 }
 
 // RemoveJob 删除Job
 func RemoveJob(key string) error {
-	_, err := storage.Rdb.Del(storage.Ctx, key).Result()
+	_, err := config.Rdb.Del(config.Ctx, key).Result()
 	return err
 }
